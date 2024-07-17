@@ -1,0 +1,31 @@
+def water_jug_solver(jug1, jug2, target):
+    from collections import deque
+    visited = set()
+    queue = deque([(0, 0)])
+
+    while queue:
+        state = queue.popleft()
+        if state in visited:
+            continue
+
+        if state[0] > jug1 or state[1] > jug2 or state[0] < 0 or state[1] < 0:
+            continue
+
+        if state[0] == target or state[1] == target or state[0] + state[1] == target:
+            return True
+
+        visited.add(state)
+
+        queue.append((jug1, state[1]))
+        queue.append((state[0], jug2))
+        queue.append((0, state[1]))
+        queue.append((state[0], 0))
+        queue.append((state[0] - min(state[0], jug2 - state[1]), state[1] + min(state[0], jug2 - state[1])))
+        queue.append((state[0] + min(state[1], jug1 - state[0]), state[1] - min(state[1], jug1 - state[0])))
+
+    return False
+
+jug1_capacity = 4
+jug2_capacity = 3
+target_amount = 2
+print(water_jug_solver(jug1_capacity, jug2_capacity, target_amount))
