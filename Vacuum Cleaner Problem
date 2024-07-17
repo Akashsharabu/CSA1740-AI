@@ -1,0 +1,40 @@
+def vacuum_cleaner(environment):
+    def print_environment(env):
+        for row in env:
+            print(" ".join(row))
+        print()
+
+    def is_clean(env):
+        for row in env:
+            if 'D' in row:
+                return False
+        return True
+
+    def clean(env, pos):
+        if env[pos[0]][pos[1]] == 'D':
+            env[pos[0]][pos[1]] = 'C'
+        return env
+
+    def move(env, pos):
+        directions = [(0, 1), (1, 0), (0, -1), (-1, 0)]
+        for direction in directions:
+            new_pos = (pos[0] + direction[0], pos[1] + direction[1])
+            if 0 <= new_pos[0] < len(env) and 0 <= new_pos[1] < len(env[0]):
+                yield new_pos
+
+    current_pos = (0, 0)
+    while not is_clean(environment):
+        environment = clean(environment, current_pos)
+        print_environment(environment)
+        for new_pos in move(environment, current_pos):
+            if environment[new_pos[0]][new_pos[1]] == 'D':
+                current_pos = new_pos
+                break
+
+environment = [
+    ['D', 'D', 'C'],
+    ['D', 'C', 'C'],
+    ['C', 'D', 'C']
+]
+
+vacuum_cleaner(environment)
